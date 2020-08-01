@@ -18,16 +18,22 @@ interface QueryView : MvpView {
 
     @AddToEndSingle
     fun hideLoading()
+
+    @AddToEndSingle
+    fun disableTargetLanguage(languageId: Int)
+
+    @AddToEndSingle
+    fun showError(message: String?)
 }
 
 class QueryPresenter @Inject constructor(private val translationService: TranslationService) :
     MvpPresenter<QueryView>() {
 
-    fun translate(query: String) {
+    fun translate(query: String, sourceLanguage: Int, targetLanguage: Int) {
         viewState.showLoading()
-        translationService.translate(query, 3, 2)
+        translationService.translate(query, sourceLanguage, targetLanguage)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { t: TranslationResult ->
+            .subscribe ( { t: TranslationResult ->
                 val result =
                     ArrayList<QueryResultItem>(t.options.sumBy { option -> option.items.size } + t.options.size)
                 for (option in t.options) {
@@ -38,7 +44,15 @@ class QueryPresenter @Inject constructor(private val translationService: Transla
                 }
                 viewState.showResult(result)
                 viewState.hideLoading()
-            }
+            }, {
+                    error ->
+                viewState.showError(error.message)
+                viewState.hideLoading()
+            })
+    }
+
+    fun onSourceLanguageSelected(languageId: Int) {
+        viewState.disableTargetLanguage(languageId)
     }
 
 }
