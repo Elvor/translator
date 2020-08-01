@@ -4,76 +4,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
+    <TextView
         android:id="@+id/query"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/query_hint"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toStartOf="@+id/history"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/normal_padding"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/history"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:text="@string/history"
-        android:textColor="@color/colorBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Spinner
+    <TextView
         android:id="@+id/source_language"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         app:layout_constraintEnd_toStartOf="@+id/target_language"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/query" />
 
-    <Spinner
+    <TextView
         android:id="@+id/target_language"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/source_language"
         app:layout_constraintTop_toBottomOf="@+id/query" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/results"
+        android:id="@+id/result_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/translate_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/target_language">
-
-    </androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintTop_toBottomOf="@id/source_language" />
 
     <include
         android:id="@+id/loading_screen"
         layout="@layout/layout_loading_screen"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/translate_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/source_language" />
-
-    <TextView
-        android:id="@+id/translate_btn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:gravity="center_horizontal"
-        android:padding="@dimen/normal_padding"
-        android:text="@string/translate"
-        android:textColor="@color/colorBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

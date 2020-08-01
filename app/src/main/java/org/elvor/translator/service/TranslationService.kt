@@ -3,14 +3,18 @@ package org.elvor.translator.service
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import org.elvor.translator.backend.TranslationServiceApi
+import org.elvor.translator.db.AppDatabase
+import org.elvor.translator.db.Query
 import org.jsoup.Jsoup
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
-class TranslationService @Inject constructor(private val translationServiceApi: TranslationServiceApi) {
+class TranslationService @Inject constructor(
+    private val translationServiceApi: TranslationServiceApi,
+    private val appDatabase: AppDatabase
+) {
 
-    //TODO fix streams
     fun translate(
         query: String,
         sourceLanguageId: Int,
@@ -18,6 +22,19 @@ class TranslationService @Inject constructor(private val translationServiceApi: 
     ): Observable<TranslationResult> {
         return translationServiceApi.getTranslations(query, sourceLanguageId, targetLanguageId)
             .subscribeOn(Schedulers.io())
+            .flatMap { content ->
+                return@flatMap appDatabase.queryDao().insertQuery(
+                    Query(
+                        null,
+                        query,
+                        sourceLanguageId,
+                        targetLanguageId,
+                        System.currentTimeMillis()
+                    )
+                ).andThen(Observable.just(content))
+                //TODO proposal: clean older history
+
+            }
             .map { content ->
                 val doc = Jsoup.parse(content.string())
                 val tables = doc.select("table[width=\"100%\"]")

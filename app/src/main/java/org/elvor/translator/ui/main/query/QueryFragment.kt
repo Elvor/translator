@@ -1,6 +1,5 @@
 package org.elvor.translator.ui.main.query
 
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,24 +8,25 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import org.elvor.translator.R
 import org.elvor.translator.databinding.FragmentQueryBinding
 import org.elvor.translator.ui.main.MainActivity
+import org.elvor.translator.ui.main.QueryResultItem
+import org.elvor.translator.ui.main.ResultListAdapter
+import org.elvor.translator.ui.main.showErrorNotification
 import javax.inject.Inject
 import javax.inject.Provider
 
 class QueryFragment : MvpAppCompatFragment(), QueryView {
-
     @Inject
     lateinit var presenterProvider: Provider<QueryPresenter>
 
     private val presenter by moxyPresenter { presenterProvider.get() }
     private lateinit var binding: FragmentQueryBinding
-    private val adapter = QueryResultAdapter()
+    private val adapter = ResultListAdapter()
     private var disabledTargetLanguage = 1
     lateinit var targetLanguageAdapter: ArrayAdapter<String>
 
@@ -49,6 +49,7 @@ class QueryFragment : MvpAppCompatFragment(), QueryView {
             }
             initSourceLanguagesDropdown(binding.sourceLanguage)
             initTargetLanguageDropdown(binding.targetLanguage)
+            history.setOnClickListener { presenter.openHistory() }
             forceDisableTargetLanguage(1)
             return root
         }
@@ -79,19 +80,17 @@ class QueryFragment : MvpAppCompatFragment(), QueryView {
             return
         }
         val languages = resources.getStringArray(R.array.languages)
-        targetLanguageAdapter.insert(languages[disabledTargetLanguage - 1], disabledTargetLanguage - 1)
+        targetLanguageAdapter.insert(
+            languages[disabledTargetLanguage - 1],
+            disabledTargetLanguage - 1
+        )
         targetLanguageAdapter.remove(languages[languageId - 1])
         targetLanguageAdapter.notifyDataSetChanged()
         disabledTargetLanguage = languageId
     }
 
     override fun showError(message: String?) {
-        AlertDialog.Builder(requireContext())
-            .setTitle(R.string.error_title)
-            .setMessage(message ?: getString(R.string.error_message_unknown))
-            .setNeutralButton(android.R.string.ok) { dialog, _ ->  dialog.cancel()}
-            .create()
-            .show()
+        showErrorNotification(requireContext(), message)
     }
 
     private fun forceDisableTargetLanguage(languageId: Int) {
@@ -103,8 +102,11 @@ class QueryFragment : MvpAppCompatFragment(), QueryView {
 
     private fun initDropdown(dropdown: Spinner): ArrayAdapter<String> {
         val viewRes = android.R.layout.simple_spinner_dropdown_item
-//        val adapter = ArrayAdapter.createFromResource(requireContext(), R.array.languages, viewRes)
-        val adapter = ArrayAdapter<String>(requireContext(), viewRes, resources.getStringArray(R.array.languages).toMutableList())
+        val adapter = ArrayAdapter<String>(
+            requireContext(),
+            viewRes,
+            resources.getStringArray(R.array.languages).toMutableList()
+        )
         adapter.setDropDownViewResource(viewRes)
         dropdown.adapter = adapter
         return adapter
@@ -119,7 +121,7 @@ class QueryFragment : MvpAppCompatFragment(), QueryView {
         presenter.translate(
             word.toString(),
             binding.sourceLanguage.selectedItemPosition + 1,
-            binding.targetLanguage.selectedItemPosition  + if (disabledTargetLanguage <= binding.targetLanguage.selectedItemPosition + 1) 2 else 1
+            binding.targetLanguage.selectedItemPosition + if (disabledTargetLanguage <= binding.targetLanguage.selectedItemPosition + 1) 2 else 1
         )
     }
 
@@ -128,11 +130,11 @@ class QueryFragment : MvpAppCompatFragment(), QueryView {
     }
 
     override fun showLoading() {
-        binding.loadingScreen.visibility = View.VISIBLE
+        binding.loadingScreen.root.visibility = View.VISIBLE
     }
 
     override fun hideLoading() {
-        binding.loadingScreen.visibility = View.GONE
+        binding.loadingScreen.root.visibility = View.GONE
     }
 
 }

@@ -11,7 +11,7 @@ class BackendModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit() : Retrofit {
+    fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://www.multitran.com/")
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
@@ -20,7 +20,7 @@ class BackendModule {
 
     @Singleton
     @Provides
-    fun provideTranslationServiceApi(retrofit: Retrofit) : TranslationServiceApi {
+    fun provideTranslationServiceApi(retrofit: Retrofit): TranslationServiceApi {
         return retrofit.create(TranslationServiceApi::class.java)
     }
 }

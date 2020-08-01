@@ -73,4 +73,8 @@ dependencies {
 
     implementation 'org.jsoup:jsoup:1.13.1'
 
+    def room_version = "2.3.0-alpha02"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-rxjava3:$room_version"
 }

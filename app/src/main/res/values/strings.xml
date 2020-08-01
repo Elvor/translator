@@ -1,11 +1,12 @@
 <resources>
-    <string name="app_name">translator</string>
+    <string name="app_name">Translator</string>
     <string name="error_title">Error occurred</string>
     <string name="error_message_unknown">Unknown error</string>
     <string name="translate">Translate</string>
     <string name="query_hint">Enter query</string>
-    <string name="lang_english">English</string>
-    <string name="lang_russian">Russian</string>
-    <string name="lang_german">German</string>
-    <string name="lang_french">French</string>
+    <string name="lang_english">ENG</string>
+    <string name="lang_russian">RUS</string>
+    <string name="lang_german">DEU</string>
+    <string name="lang_french">FRA</string>
+    <string name="history">History</string>
 </resources>

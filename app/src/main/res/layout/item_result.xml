@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/count"
-        android:layout_width="50sp"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:gravity="center_horizontal"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -25,12 +24,11 @@
 
     <TextView
         android:id="@+id/value"
+        style="@style/itemHtmlText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/info"
-        app:layout_constraintTop_toTopOf="parent"
-        style="@style/itemHtmlText"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
