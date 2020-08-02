@@ -9,4 +9,5 @@
     <string name="lang_german">DEU</string>
     <string name="lang_french">FRA</string>
     <string name="history">History</string>
+    <string name="current_language">Current language: %1$s</string>
 </resources>

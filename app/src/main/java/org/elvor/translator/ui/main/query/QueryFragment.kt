@@ -28,11 +28,13 @@ class QueryFragment : MvpAppCompatFragment(), QueryView {
     private lateinit var binding: FragmentQueryBinding
     private val adapter = ResultListAdapter()
     private var disabledTargetLanguage = 1
-    lateinit var targetLanguageAdapter: ArrayAdapter<String>
+    private lateinit var targetLanguageAdapter: ArrayAdapter<String>
+    private lateinit var languages: Array<String>
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (requireActivity() as MainActivity).mainComponent.inject(this)
+        languages = resources.getStringArray(R.array.languages)
     }
 
     override fun onCreateView(
@@ -79,7 +81,6 @@ class QueryFragment : MvpAppCompatFragment(), QueryView {
         if (disabledTargetLanguage == languageId) {
             return
         }
-        val languages = resources.getStringArray(R.array.languages)
         targetLanguageAdapter.insert(
             languages[disabledTargetLanguage - 1],
             disabledTargetLanguage - 1
@@ -87,6 +88,10 @@ class QueryFragment : MvpAppCompatFragment(), QueryView {
         targetLanguageAdapter.remove(languages[languageId - 1])
         targetLanguageAdapter.notifyDataSetChanged()
         disabledTargetLanguage = languageId
+    }
+
+    override fun setCurrentLanguage(languageId: Int) {
+        binding.currentLanguage.text = resources.getString(R.string.current_language, languages[languageId - 1])
     }
 
     override fun showError(message: String?) {

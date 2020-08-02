@@ -18,7 +18,7 @@ class HistoryQueryPresenter @Inject constructor(private val translationService: 
     fun fillQueryInfo(query: String, sourceLanguageId: Int, targetLanguageId: Int) {
         viewState.fillQueryInfo(query, sourceLanguageId, targetLanguageId)
         viewState.showLoading()
-        translationService.translate(query, sourceLanguageId, targetLanguageId)
+        translationService.fetchTranslation(query, sourceLanguageId, targetLanguageId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 with(viewState) {

@@ -1,6 +1,7 @@
 package org.elvor.translator.ui.main
 
 import moxy.viewstate.strategy.alias.AddToEndSingle
+import moxy.viewstate.strategy.alias.Skip
 
 interface TranslationResultView {
     @AddToEndSingle
@@ -12,6 +13,6 @@ interface TranslationResultView {
     @AddToEndSingle
     fun hideLoading()
 
-    @AddToEndSingle
+    @Skip
     fun showError(message: String?)
 }

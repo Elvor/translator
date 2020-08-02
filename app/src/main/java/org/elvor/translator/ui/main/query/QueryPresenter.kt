@@ -13,6 +13,9 @@ import javax.inject.Inject
 interface QueryView : MvpView, TranslationResultView {
     @AddToEndSingle
     fun disableTargetLanguage(languageId: Int)
+
+    @AddToEndSingle
+    fun setCurrentLanguage(languageId: Int)
 }
 
 class QueryPresenter @Inject constructor(
@@ -21,10 +24,11 @@ class QueryPresenter @Inject constructor(
 ) : MvpPresenter<QueryView>() {
     fun translate(query: String, sourceLanguage: Int, targetLanguage: Int) {
         viewState.showLoading()
-        translationService.translate(query, sourceLanguage, targetLanguage)
+        translationService.fetchTranslationAddingToHistory(query, sourceLanguage, targetLanguage)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 viewState.showResult(convert(it))
+                viewState.setCurrentLanguage(targetLanguage)
                 viewState.hideLoading()
             }, {
                 viewState.showError(it.message)
